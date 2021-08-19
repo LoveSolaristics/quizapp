@@ -1,6 +1,6 @@
 # Todo List
 
-Build a realtime Quiz App from scratch with Flutter & Firebase.
+Build a realtime Todo List App from scratch with Flutter & Firebase.
 
 ## Getting Started
 
