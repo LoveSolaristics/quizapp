@@ -30,6 +30,20 @@ class _HomeState extends State<Home> {
           itemCount: todoList.length,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
+              background: Container(
+                decoration: ShapeDecoration(
+                  color: Colors.green,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              secondaryBackground: Container(
+                decoration: ShapeDecoration(
+                  color: Colors.deepOrange,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
               key: Key(todoList[index]),
               child: Card(
                 child: ListTile(
@@ -48,6 +62,16 @@ class _HomeState extends State<Home> {
                 ),
               ),
               onDismissed: (direction) {
+                if (direction == DismissDirection.endToStart){
+                  setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача удалена!')));
+                  });
+                }
+                else{
+                  setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача выполнена!')));
+                  });
+                }
                 setState(() {
                   todoList.removeAt(index);
                 });
@@ -80,8 +104,10 @@ class _HomeState extends State<Home> {
                             if (userTodo.length != 0) {
                               setState(() {
                                 todoList.add(userTodo);
+                                userTodo = '';
                               });
                               Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача добавлена!')));
                             }
                           },
                           child: Text('Добавить')),
