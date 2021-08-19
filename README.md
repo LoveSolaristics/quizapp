@@ -1,4 +1,4 @@
-# Quizapp
+# Todo List
 
 Build a realtime Quiz App from scratch with Flutter & Firebase.
 
@@ -6,11 +6,11 @@ Build a realtime Quiz App from scratch with Flutter & Firebase.
 
 I. Clone repo
 ```
-git clone https://github.com/LoveSolaristics/quizapp.git master
+git clone https://github.com/LoveSolaristics/todolist.git master
 ```
 II. Go to your project folder 
 ```
-cd quizapp
+cd todolist-flutter
 ```
 III. Run project
 ```
