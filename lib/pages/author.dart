@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizapp/pages/home.dart';
+import 'package:quizapp/pages/completed.dart';
 
 class Author extends StatelessWidget {
   const Author({Key key}) : super(key: key);
@@ -11,6 +13,10 @@ class Author extends StatelessWidget {
             Home()), (Route<dynamic> route) => false);
         break;
       case 1:
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            Completed()), (Route<dynamic> route) => false);
+        break;
+      case 2:
         break;
     }
   }
@@ -27,7 +33,8 @@ class Author extends StatelessWidget {
             onSelected: (item) => onSelectedButtonInAuthor(context, item),
             itemBuilder: (context) => [
               PopupMenuItem(value: 0, child: Text('Список дел')),
-              PopupMenuItem(value: 1, child: Text('Автор')),
+              PopupMenuItem(value: 1, child: Text('Завершенные дела')),
+              PopupMenuItem(value: 2, child: Text('Автор')),
             ],
           ),
         ],

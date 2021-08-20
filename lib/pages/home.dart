@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:quizapp/pages/author.dart';
+import 'package:quizapp/pages/completed.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
@@ -12,10 +15,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String userTodo;
 
-  // подключение бд
-
-
-  // запуск
   @override
   void initState() {
     super.initState();
@@ -26,6 +25,10 @@ class _HomeState extends State<Home> {
       case 0:
         break;
       case 1:
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+            Completed()), (Route<dynamic> route) => false);
+        break;
+      case 2:
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
             Author()), (Route<dynamic> route) => false);
         break;
@@ -44,7 +47,8 @@ class _HomeState extends State<Home> {
             onSelected: (item) => onSelectedButtonInHome(context, item),
             itemBuilder: (context) => [
               PopupMenuItem(value: 0, child: Text('Список дел')),
-              PopupMenuItem(value: 1, child: Text('Автор')),
+              PopupMenuItem(value: 1, child: Text('Завершенные дела')),
+              PopupMenuItem(value: 2, child: Text('Автор')),
             ],
           ),
         ],
@@ -82,27 +86,20 @@ class _HomeState extends State<Home> {
                         color: Colors.deepOrangeAccent,
                         onPressed: () {
                           FirebaseFirestore.instance.collection('items').doc(snapshot.data.docs[index].id).delete();
-                          setState(() {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Задача удалена!')));
-                          });
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача удалена!')));
                         },
                       ),
                     ),
                   ),
                   onDismissed: (direction) {
                     if (direction == DismissDirection.endToStart) {
-                      setState(() {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Задача удалена!')));
-                      });
+                      FirebaseFirestore.instance.collection('items').doc(snapshot.data.docs[index].id).delete();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача удалена!')));
                     } else {
-                      setState(() {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Задача выполнена!')));
-                      });
+                      FirebaseFirestore.instance.collection('items_completed').add({'item': snapshot.data.docs[index].get('item')});
+                      FirebaseFirestore.instance.collection('items').doc(snapshot.data.docs[index].id).delete();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Задача выполнена!')));
                     }
-                    FirebaseFirestore.instance.collection('items').doc(snapshot.data.docs[index].id).delete();
                   },
                 );
               });
@@ -135,7 +132,6 @@ class _HomeState extends State<Home> {
                               FirebaseFirestore.instance.collection('items').add({'item': userTodo});
                               userTodo = '';
 
-                              
                               Navigator.of(context).pop();
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Задача добавлена!')));
